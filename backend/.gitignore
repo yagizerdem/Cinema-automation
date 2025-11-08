@@ -2,4 +2,6 @@ node_modules
 build
 npm-debug.log
 .env
-.DS_Store
+.dev.env
+.prod.env
+.DS_Store".env" 
