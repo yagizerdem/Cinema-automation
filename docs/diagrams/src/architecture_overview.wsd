@@ -1,0 +1,225 @@
+@startchen
+
+entity Administrator {
+    _id: STRING <<key>>
+    Name {
+        Fname
+        Lname
+    }
+    Salary: DECIMAL
+    Address: STRING
+    Age: INT
+    Gender: STRING
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity CinemaDepartmentManager {
+    _id: STRING <<key>>
+    Name {
+        Fname
+        Lname
+    }
+    Salary: DECIMAL
+    Address: STRING
+    Age: INT
+    Gender: STRING
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity BoxOfficeSupervisor {
+    _id: STRING <<key>>
+    Name {
+        Fname
+        Lname
+    }
+    Salary: DECIMAL
+    Address: STRING
+    Age: INT
+    Gender: STRING
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity BoxOfficeClerk {
+    _id: STRING <<key>>
+    Name {
+        Fname
+        Lname
+    }
+    Salary: DECIMAL
+    Address: STRING
+    Age: INT
+    Gender: STRING
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity ITManager {
+    _id: STRING <<key>>
+    Name {
+        Fname
+        Lname
+    }
+    Salary: DECIMAL
+    Address: STRING
+    Age: INT
+    Gender: STRING
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity RegularMember {
+    _id: STRING <<key>>
+    Name {
+        Fname
+        Lname
+    }
+    Salary: DECIMAL
+    Address: STRING
+    Age: INT
+    Gender: STRING
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity VIPMember {
+    _id: STRING <<key>>
+    Name {
+        Fname
+        Lname
+    }
+    Salary: DECIMAL
+    Address: STRING
+    Age: INT
+    Gender: STRING
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity VIPGuest {
+    _id: STRING <<key>>
+    Name {
+        Fname
+        Lname
+    }
+    Salary: DECIMAL
+    Address: STRING
+    Age: INT
+    Gender: STRING
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity SystemProcess {
+    _id: STRING <<key>>
+    Name {
+        Fname
+        Lname
+    }
+    Salary: DECIMAL
+    Address: STRING
+    Age: INT
+    Gender: STRING
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity Ticket {
+    _id : STRING <<key>>
+    hallId : STRING
+    seatId : STRING
+    price : DECIMAL
+    sessionId:STRING
+    discountedPrice : DECIMAL
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+
+entity Hall {
+    _id:STRING
+    _label:STRING 
+    createdAt: DATE
+    updatedAt: DATE
+}
+
+entity Seat {
+    _id:String
+    seatNo:String
+        createdAt: DATE
+    updatedAt: DATE
+}
+
+entity Session {
+  _id : STRING <<key>>
+  movieId : STRING
+  hallId : STRING
+  startTime : DATE
+  endTime : DATE
+  price : INTEGER
+  isActive : BOOL
+  createdBy : STRING
+  createdAt: DATE
+  updatedAt: DATE
+
+}
+
+entity Sales {
+    _id : STRING
+    type {
+        web
+        phone
+        cabin
+    }
+    ticket
+    boxOfficeClerk
+    saleStatus
+    createdAt: DATE
+    updatedAt: DATE
+
+}
+
+entity Occupied {
+    _id: STRING
+    sessinonId: STRING
+    seatId: STRING
+    HallId : STRING
+      createdAt: DATE
+    updatedAt: DATE
+}
+
+entity Movie {
+  _id : STRING <<key>>
+  _title : STRING
+  duration : INT
+  director : STRING
+  genre : STRING
+      createdAt: DATE
+    updatedAt: DATE
+}
+
+Seat -N- Hall
+VIPGuest -N- Ticket
+VIPMember -N- Ticket
+RegularMember -N- Ticket
+
+Session -N- Ticket
+Sales =1= Ticket
+Sales -N- RegularMember
+Sales -N- VIPMember
+Sales -N- BoxOfficeClerk
+
+Ticket -1- Seat
+Ticket -1- Hall
+
+Occupied -1- Seat
+Occupied -1- Session
+Occupied -1- Hall
+
+Session -N- Movie
+
+Hall -N- Seat
+
+@endchen

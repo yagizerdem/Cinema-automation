@@ -1,0 +1,2 @@
+java -jar plantuml.jar architecture_overview.wsd
+java -DPLANTUML_LIMIT_SIZE=16384 -jar plantuml.jar -tpng architecture_overview.wsd
