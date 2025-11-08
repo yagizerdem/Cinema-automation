@@ -1,0 +1,233 @@
+@startuml
+
+
+class baseEntity  {
+    Date: createdAt
+    Date: updatedAt
+    String: ObjectId
+    Boolean : isActive
+
+    getCreatedAt() : Date
+    setCreatedAt(createdAt : Date) : void
+    getUpdatedAt() : Date
+    setUpdatedAt(updatedAt : Date) : void
+    getObjectId() : String
+    setObjectId(objectId : String) : void
+    getIsActive(): Boolean
+    setIsActvie(isActive : Boolean) : void
+}
+
+class User {
+    String: FirstName
+    String: LastName
+    Role:Role
+    String: Email
+    String:PasswordHash
+    String:TC
+    String:Phone
+
+    getFirstName() : String
+    setFirstName(String)
+    getLastName() : String
+    setLastName(String)
+    getRole() : Role
+    setRole(Role)
+    getEmail() : String
+    setEmail(String)
+    getPasswordHash() : String
+    setPasswordHash(String)
+    getTC() : String
+    setTC(String)
+    getPhone() : String
+    setPhone(String)
+}
+
+enum Role {
+  Patron 
+  Management 
+  CinemaDepartmentManager 
+  Cashier 
+  ITDepartmentManager 
+  VIPMember 
+  RegularMember
+}
+
+
+class Seat {
+    String SeatNo
+
+    getSeatNoe() : String
+    setSeatNo(SeatNo : String) : void
+}
+
+class Hall {
+    String label
+    Seat[] seats
+
+    getLabel(): Stirng
+    setLabel(seat : string) : void
+    getSeats(): Seat[]
+    setSeats(seats : Seat) : void
+}
+
+class Session {
+    Date startTime
+    Date sessionTimeSpan
+    Date endTime
+    Hall hall
+    Movie movie
+}
+
+class Ticket {
+    Float Price
+    Flaot DiscountPrice
+    Session session
+    Seat seat
+}
+
+class Movie {
+    title : String
+    originalTitle : String
+    director : String
+    cast : String
+    genre : String
+    duration : int   
+    releaseDate : Date
+    language : String
+    subtitleLanguage : String
+    ageRating : String
+    description : String
+    posterUrl : String
+    trailerUrl : String
+
+    getMovieId() : String
+    setMovieId(movieId : String) : void
+    getTitle() : String
+    setTitle(title : String) : void
+    getOriginalTitle() : String
+    setOriginalTitle(originalTitle : String) : void
+    getDirector() : String
+    setDirector(director : String) : void
+    getCast() : String
+    setCast(cast : String) : void
+    getGenre() : String
+    setGenre(genre : String) : void
+    getDuration() : int
+    setDuration(duration : int) : void
+    getReleaseDate() : Date
+    setReleaseDate(releaseDate : Date) : void
+    getLanguage() : String
+    setLanguage(language : String) : void
+    getSubtitleLanguage() : String
+    setSubtitleLanguage(subtitleLanguage : String) : void
+    getAgeRating() : String
+    setAgeRating(ageRating : String) : void
+    getDescription() : String
+    setDescription(description : String) : void
+    getPosterUrl() : String
+    setPosterUrl(posterUrl : String) : void
+    getTrailerUrl() : String
+    setTrailerUrl(trailerUrl : String) : void
+}
+
+
+
+class Administrator {
+    name { fname lname }
+    salary : Decimal
+    address : String
+    age : Int
+    gender : String
+}
+
+class CinemaDepartmentManager {
+    name { fname lname }
+    salary : Decimal
+    address : String
+    age : Int
+    gender : String
+}
+
+
+class BoxOfficeClerk {
+    name { fname lname }
+    salary : Decimal
+    address : String
+    age : Int
+    gender : String
+}
+
+class ITManager {
+    name { fname lname }
+    salary : Decimal
+    address : String
+    age : Int
+    gender : String
+}
+
+class RegularMember {
+    name { fname lname }
+    salary : Decimal
+    address : String
+    age : Int
+    gender : String
+}
+
+class VIPMember {
+    name { fname lname }
+    salary : Decimal
+    address : String
+    age : Int
+    gender : String
+}
+
+class VIPGuest {
+    name { fname lname }
+    salary : Decimal
+    address : String
+    age : Int
+    gender : String
+}
+
+class SystemProcess {
+    name { fname lname }
+    salary : Decimal
+    address : String
+    age : Int
+    gender : String
+}
+
+class Occipied {
+    Session : session
+    Seat : seat
+}
+
+
+Role --> User
+Hall *-- Seat 
+Session -- Hall
+Movie *-- Session
+Ticket -- Seat
+Ticket -- Session
+Occipied -- Session
+
+baseEntity <|-- Movie
+baseEntity <|-- Session
+baseEntity <|-- Seat
+baseEntity <|-- Ticket
+baseEntity <|-- Hall
+baseEntity <|-- User
+baseEntity <|-- Occipied
+
+
+Administrator --|> User
+CinemaDepartmentManager --|> User
+Administrator --|> User
+BoxOfficeClerk --|> User
+ITManager --|> User
+RegularMember --|> User
+VIPMember --|> User
+VIPGuest --|> User
+SystemProcess --|> User
+
+@enduml
