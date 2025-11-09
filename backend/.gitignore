@@ -3,4 +3,5 @@ build
 npm-debug.log
 .env
 *.env
+.dev.env
 .DS_Store".env" 
