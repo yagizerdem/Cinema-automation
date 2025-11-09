@@ -4,7 +4,7 @@ const { EnsureEmailNotExist } = require("../business/userRelatedLogic");
 const { userRoles } = require("../enum/userRoles");
 
 async function insertClient({ firstName, lastName, email, password }) {
-  // await EnsureEmailNotExist(email);
+  await EnsureEmailNotExist(email);
 
   const user = new User({
     firstName,

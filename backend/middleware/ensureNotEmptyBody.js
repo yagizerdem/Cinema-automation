@@ -1,5 +1,5 @@
 const { HttpStatusCode } = require("../enum/http-status-codes");
-const AppError = require("../error/AppError");
+const { AppError } = require("../error/AppError");
 
 function ensureNotEmptyBody(req, res, next) {
   if (!req.body || Object.keys(req.body).length === 0) {

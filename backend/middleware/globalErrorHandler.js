@@ -116,6 +116,7 @@ function globalErrorHandler(err, req, res, next) {
       default:
         break;
     }
+
     return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(
       ApiResponse.error({
         message: "Internal Server Error",

@@ -49,6 +49,26 @@ const registerSchema = Joi.object({
     .required(),
 })
   .required()
-  .prefs({ abortEarly: false, stripUnknown: true });
+  .prefs({ abortEarly: false, stripUnknown: true })
+  .unknown(false);
 
-module.exports = { registerSchema };
+const emailVerificationSchema = Joi.object({
+  email: Joi.string()
+    .trim()
+    .lowercase()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      "string.email": "Email is not valid",
+      "any.required": "Email is required",
+    }),
+  fullName: Joi.string().trim().min(2).required().messages({
+    "string.empty": "Full name is required",
+    "string.min": "Full name must be at least 2 characters long",
+  }),
+})
+  .required()
+  .prefs({ abortEarly: false, stripUnknown: true })
+  .unknown(false);
+
+module.exports = { registerSchema, emailVerificationSchema };
