@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { userRoles } = require("../../enum/userRoles");
+const { entityStatus } = require("../../enum/entityStatus");
 
 const schema = new mongoose.Schema(
   {
@@ -16,6 +17,14 @@ const schema = new mongoose.Schema(
     normalizedFirstName: { type: String },
     normalizedLastName: { type: String },
     normalizedFullName: { type: String },
+
+    entityStatus: {
+      type: String,
+      enum: Object.values(entityStatus),
+      default: entityStatus.ACTIVE,
+    },
+    isActive: { type: Boolean, default: true },
+    emailVerified: { type: Boolean, default: false },
   },
   {
     timestamps: true,
