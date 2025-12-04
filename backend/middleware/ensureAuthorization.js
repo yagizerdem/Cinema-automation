@@ -9,6 +9,8 @@ function ensureAuthorization(requiredRoles) {
   return function (req, res, next) {
     const user = req.user;
 
+    console.log("user : ", user);
+
     if (!user) {
       return next(
         new AppError({

@@ -5,12 +5,12 @@ const { hashPassword } = require("../utils/hashPassword");
 const { userRoles } = require("../enum/userRoles");
 
 connectDB().then(() => {
-  //   SeedAdmin();
-  //   SeedCustomers();
-  // SeedBOX_OFFICE_SUPERVISOR();
-  // SeedBOX_OFFICE_CLERK();
-  // SeedIT_MANAGER();
-  // SeedCINEMA_DEPARTMENT_MANAGER();
+  SeedAdmin();
+  SeedCustomers();
+  SeedBOX_OFFICE_SUPERVISOR();
+  SeedBOX_OFFICE_CLERK();
+  SeedIT_MANAGER();
+  SeedCINEMA_DEPARTMENT_MANAGER();
 });
 
 async function SeedAdmin() {

@@ -63,7 +63,14 @@ async function login(req, res) {
   }
 
   userFromDb.passwordHash = undefined; // remove password hash before signing jwt
-  const jwt = signJwt({ ...userFromDb });
+  const jwt = signJwt({
+    email: userFromDb.email,
+    id: userFromDb._id,
+    role: userFromDb.role,
+    emailVerified: userFromDb.emailVerified,
+    firstName: userFromDb.firstName,
+    lastName: userFromDb.lastName,
+  });
 
   res.cookie("jwt", jwt, { maxAge: 60 * 60 * 24 * 90, httpOnly: true });
 

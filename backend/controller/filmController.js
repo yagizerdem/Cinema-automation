@@ -1,11 +1,31 @@
 const { HttpStatusCode } = require("../enum/http-status-codes");
 const { AppError } = require("../error/AppError");
 const { ApiResponse } = require("../model/response/apiResponse");
+const { filmSchema } = require("../validator/filmControllerValidator");
+const { Film } = require("../model/entity/Film");
+const { insertFilm } = require("../service/filmService");
 
 async function addFilm(req, res) {
+  const { error, value } = filmSchema.validate(req.body);
+
+  if (error) {
+    const message = error.details.map((detail) => detail.message).join(", ");
+    throw new AppError({
+      message: `Validation error: ${message}`,
+      statusCode: HttpStatusCode.BAD_REQUEST,
+      isOperational: true,
+    });
+  }
+
+  const filmEntity = new Film({
+    ...value,
+  });
+
+  await insertFilm(filmEntity);
+
   const payload = ApiResponse.success({
     message: "Film added successfully",
-    data: null,
+    data: filmEntity,
     statusCode: HttpStatusCode.CREATED,
   });
 

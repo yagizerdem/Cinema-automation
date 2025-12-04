@@ -1,4 +1,3 @@
-const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 const {
@@ -10,15 +9,32 @@ const { ensureNotEmptyBody } = require("../middleware/ensureNotEmptyBody");
 const { asyncWrapper } = require("../utils/asyncWrapper");
 const { ensureAuthorization } = require("../middleware/ensureAuthorization");
 const { userRoles } = require("../enum/userRoles");
+const { ensureAuthentication } = require("../middleware/ensureAuthentication");
 
 router.post(
   "/addFilm",
   ensureNotEmptyBody,
-  passport.authenticate("jwt", { session: false }),
-  ensureAuthorization([userRoles.CLIENT]),
+  asyncWrapper(ensureAuthentication),
+  ensureAuthorization([userRoles.ADMIN, userRoles.BOX_OFFICE_SUPERVISOR]),
   asyncWrapper(addFilm)
 );
-router.get("/getFilm", ensureNotEmptyBody, asyncWrapper(getFilm));
-router.post("/removeFilm", ensureNotEmptyBody, asyncWrapper(removeFilm));
+router.get(
+  "/getFilm",
+  ensureNotEmptyBody,
+  asyncWrapper(ensureAuthentication),
+  ensureAuthorization([
+    userRoles.ADMIN,
+    userRoles.BOX_OFFICE_SUPERVISOR,
+    userRoles.BOX_OFFICE_CLERK,
+  ]),
+  asyncWrapper(getFilm)
+);
+router.post(
+  "/removeFilm",
+  ensureNotEmptyBody,
+  asyncWrapper(ensureAuthentication),
+  ensureAuthorization([userRoles.ADMIN, userRoles.BOX_OFFICE_SUPERVISOR]),
+  asyncWrapper(removeFilm)
+);
 
 module.exports = { router };
