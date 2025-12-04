@@ -3,6 +3,8 @@ const { AppError } = require("../error/AppError");
 const { ApiResponse } = require("../model/response/apiResponse");
 
 function globalErrorHandler(err, req, res, next) {
+  console.log(err);
+
   if (err instanceof AppError) {
     if (err.isOperational) {
       return res.status(err.statusCode).json(

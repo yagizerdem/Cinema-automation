@@ -71,4 +71,24 @@ const emailVerificationSchema = Joi.object({
   .prefs({ abortEarly: false, stripUnknown: true })
   .unknown(false);
 
-module.exports = { registerSchema, emailVerificationSchema };
+const loginVerificationSchema = Joi.object({
+  email: Joi.string()
+    .trim()
+    .lowercase()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      "string.email": "Email is not valid",
+      "any.required": "Email is required",
+    }),
+
+  password: Joi.string().required().messages({
+    "string.empty": "Password is required",
+  }),
+});
+
+module.exports = {
+  registerSchema,
+  emailVerificationSchema,
+  loginVerificationSchema,
+};
