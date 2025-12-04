@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { entityStatus } = require("../../enum/entityStatus");
 
 const schema = new mongoose.Schema({
   session: {
@@ -11,6 +12,11 @@ const schema = new mongoose.Schema({
   seat: String,
   type: String, // "full", "student", "vip", "vipGuest"
   price: Number,
+  entityStatus: {
+    type: String,
+    enum: Object.values(entityStatus),
+    default: entityStatus.ACTIVE,
+  },
 
   soldAt: { type: Date, default: Date.now },
 });

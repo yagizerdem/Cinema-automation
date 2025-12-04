@@ -3,7 +3,12 @@ const { AppError } = require("../error/AppError");
 const { ApiResponse } = require("../model/response/apiResponse");
 const { filmSchema } = require("../validator/filmControllerValidator");
 const { Film } = require("../model/entity/Film");
-const { insertFilm, getFilms } = require("../service/filmService");
+const {
+  insertFilm,
+  getFilms,
+  softDeleteFilm,
+  hardDeleteFilm,
+} = require("../service/filmService");
 
 async function addFilm(req, res) {
   const { error, value } = filmSchema.validate(req.body);
@@ -44,7 +49,11 @@ async function getFilm(req, res) {
   return res.status(HttpStatusCode.OK).json(payload);
 }
 
-async function removeFilm(req, res) {
+async function removeFilmSoft(req, res) {
+  const { filmId } = req.params;
+
+  await softDeleteFilm(filmId);
+
   const payload = ApiResponse.success({
     message: "Film removed successfully",
     data: null,
@@ -54,4 +63,18 @@ async function removeFilm(req, res) {
   return res.status(HttpStatusCode.OK).json(payload);
 }
 
-module.exports = { addFilm, getFilm, removeFilm };
+async function removeFilmHard(req, res) {
+  const { filmId } = req.params;
+
+  await hardDeleteFilm(filmId);
+
+  const payload = ApiResponse.success({
+    message: "Film removed successfully",
+    data: null,
+    statusCode: HttpStatusCode.OK,
+  });
+
+  return res.status(HttpStatusCode.OK).json(payload);
+}
+
+module.exports = { addFilm, getFilm, removeFilmSoft, removeFilmHard };

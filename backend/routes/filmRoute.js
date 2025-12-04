@@ -3,7 +3,8 @@ const router = express.Router();
 const {
   addFilm,
   getFilm,
-  removeFilm,
+  removeFilmSoft,
+  removeFilmHard,
 } = require("../controller/filmController");
 const { ensureNotEmptyBody } = require("../middleware/ensureNotEmptyBody");
 const { asyncWrapper } = require("../utils/asyncWrapper");
@@ -29,11 +30,17 @@ router.get(
   asyncWrapper(getFilm)
 );
 router.post(
-  "/removeFilm",
-  ensureNotEmptyBody,
+  "/removeFilmSoft/:filmId",
   asyncWrapper(ensureAuthentication),
   ensureAuthorization([userRoles.ADMIN, userRoles.BOX_OFFICE_SUPERVISOR]),
-  asyncWrapper(removeFilm)
+  asyncWrapper(removeFilmSoft)
+);
+
+router.post(
+  "/removeFilmHard/:filmId",
+  asyncWrapper(ensureAuthentication),
+  ensureAuthorization([userRoles.ADMIN, userRoles.BOX_OFFICE_SUPERVISOR]),
+  asyncWrapper(removeFilmHard)
 );
 
 module.exports = { router };

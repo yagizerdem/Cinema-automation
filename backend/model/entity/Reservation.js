@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { entityStatus } = require("../../enum/entityStatus");
 
 const schema = new mongoose.Schema({
   session: {
@@ -12,6 +13,11 @@ const schema = new mongoose.Schema({
 
   reservedAt: { type: Date, default: Date.now },
   expiresAt: Date, // sessionStart - 1 hour
+  entityStatus: {
+    type: String,
+    enum: Object.values(entityStatus),
+    default: entityStatus.ACTIVE,
+  },
 
   isConfirmed: Boolean,
 });

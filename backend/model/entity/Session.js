@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { entityStatus } = require("../../enum/entityStatus");
 
 const schema = new mongoose.Schema({
   film: { type: mongoose.Schema.Types.ObjectId, ref: "Film", required: true },
@@ -9,6 +10,12 @@ const schema = new mongoose.Schema({
 
   isSpecial: Boolean, // festival / special day
   basePrice: Number,
+
+  entityStatus: {
+    type: String,
+    enum: Object.values(entityStatus),
+    default: entityStatus.ACTIVE,
+  },
 });
 
 const Session = mongoose.model("Session", schema);
