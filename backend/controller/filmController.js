@@ -3,7 +3,7 @@ const { AppError } = require("../error/AppError");
 const { ApiResponse } = require("../model/response/apiResponse");
 const { filmSchema } = require("../validator/filmControllerValidator");
 const { Film } = require("../model/entity/Film");
-const { insertFilm } = require("../service/filmService");
+const { insertFilm, getFilms } = require("../service/filmService");
 
 async function addFilm(req, res) {
   const { error, value } = filmSchema.validate(req.body);
@@ -33,9 +33,11 @@ async function addFilm(req, res) {
 }
 
 async function getFilm(req, res) {
+  const films = await getFilms(req.query);
+
   const payload = ApiResponse.success({
     message: "Film fetched successfully",
-    data: null,
+    data: films,
     statusCode: HttpStatusCode.OK,
   });
 

@@ -20,7 +20,6 @@ router.post(
 );
 router.get(
   "/getFilm",
-  ensureNotEmptyBody,
   asyncWrapper(ensureAuthentication),
   ensureAuthorization([
     userRoles.ADMIN,

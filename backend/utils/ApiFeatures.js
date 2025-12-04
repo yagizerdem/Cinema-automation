@@ -8,7 +8,7 @@ class ApiFeatures {
   contains() {
     // 1A) Filtering
     const queryObj = { ...this.queryString };
-    const excludedFields = ["page", "sort", "limit", "fields"];
+    const excludedFields = ["page", "sortAsc", "sortDesc", "limit", "fields"];
     excludedFields.forEach((el) => delete queryObj[el]);
 
     // 1B) Advanced filtering
@@ -49,13 +49,21 @@ class ApiFeatures {
     return this;
   }
 
-  sort() {
-    // 2) Sorting
-    if (this.queryString.sort) {
-      const sortBy = this.queryString.sort.split(",").join(" ");
-      this.query = this.query.sort(sortBy + " _id"); // append _id to stabilize
-    } else {
-      this.query = this.query.sort("-createdAt _id"); // default + tie-breaker
+  sortAscending() {
+    if (this.queryString.sortAsc) {
+      const sortBy = this.queryString.sortAsc.split(",").join(" ");
+      this.query = this.query.sort(sortBy + " _id"); // ascending by default
+    }
+    return this;
+  }
+
+  sortDescending() {
+    if (this.queryString.sortDesc) {
+      const sortBy = this.queryString.sortDesc
+        .split(",")
+        .map((field) => "-" + field)
+        .join(" ");
+      this.query = this.query.sort(sortBy + " -_id");
     }
     return this;
   }

@@ -1,4 +1,6 @@
 const { EnsureFilmNotExistByTitle } = require("../business/filmRelatedLogic");
+const { Film } = require("../model/entity/Film");
+const { ApiFeatures } = require("../utils/ApiFeatures");
 
 /**
  * Inserts a new Film document into the database after validating uniqueness.
@@ -21,4 +23,17 @@ async function insertFilm(film) {
   return film;
 }
 
-module.exports = { insertFilm };
+async function getFilms(query = {}) {
+  const apiFeatures = new ApiFeatures(Film.find(), query);
+
+  const films = await apiFeatures
+    .contains()
+    .sortAscending()
+    .sortDescending()
+    .limitFields()
+    .paginate().query;
+
+  return films;
+}
+
+module.exports = { insertFilm, getFilms };
