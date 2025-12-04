@@ -3,7 +3,6 @@ const loadDevEnv = require("../config/load.dev.env");
 const { connectDB } = require("../config/db");
 const http = require("http");
 const { app } = require("../app");
-const passportJwtConfig = require("../config/passport/jwtConfig");
 
 async function main() {
   await connectDB();

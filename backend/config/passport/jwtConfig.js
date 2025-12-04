@@ -1,15 +1,16 @@
+const { User } = require("../../model/entity/User");
+
 const passport = require("passport");
 
-var JwtStrategy = require("passport-jwt").Strategy,
-  ExtractJwt = require("passport-jwt").ExtractJwt;
+var JwtStrategy = require("passport-jwt").Strategy;
 var opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.JWT_SECRET;
 opts.issuer = process.env.JWT_ISSUER;
 opts.audience = process.env.JWT_AUDIENCE;
 opts.jwtFromRequest = cookieExtractor;
 passport.use(
   new JwtStrategy(opts, function (jwt_payload, done) {
+    console.log("JWT payload:", jwt_payload);
     User.findOne({ id: jwt_payload.sub }, function (err, user) {
       if (err) {
         // mongoose error while querying
