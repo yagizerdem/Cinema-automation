@@ -30,6 +30,7 @@ router.get(
     userRoles.ADMIN,
     userRoles.BOX_OFFICE_SUPERVISOR,
     userRoles.BOX_OFFICE_CLERK,
+    userRoles.CLIENT,
   ]),
   asyncWrapper(getFilm)
 );

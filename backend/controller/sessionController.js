@@ -2,7 +2,11 @@ const { HttpStatusCode } = require("../enum/http-status-codes");
 const { AppError } = require("../error/AppError");
 const { ApiResponse } = require("../model/response/apiResponse");
 const { sessionSchema } = require("../validator/sessionControllerValidator");
-const { insertSession } = require("../service/sessionService");
+const {
+  insertSession,
+  getSessions: getSessionsService,
+} = require("../service/sessionService");
+var qs = require("qs");
 
 async function addSession(req, res) {
   const { error, value } = sessionSchema.validate(req.body);
@@ -28,9 +32,14 @@ async function addSession(req, res) {
 }
 
 async function getSessions(req, res) {
+  const query = qs.parse(req.query);
+  console.log(query);
+
+  const sessions = await getSessionsService(query);
+
   const payload = ApiResponse.success({
     message: "Sessions fetched successfully",
-    data: null,
+    data: sessions,
     statusCode: HttpStatusCode.OK,
   });
 

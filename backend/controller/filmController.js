@@ -38,7 +38,8 @@ async function addFilm(req, res) {
 }
 
 async function getFilm(req, res) {
-  const films = await getFilms(req.query);
+  const query = qs.parse(req.query);
+  const films = await getFilms(query);
 
   const payload = ApiResponse.success({
     message: "Film fetched successfully",

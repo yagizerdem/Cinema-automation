@@ -6,7 +6,7 @@ const { ensureAuthorization } = require("../middleware/ensureAuthorization");
 const { userRoles } = require("../enum/userRoles");
 const { ensureAuthentication } = require("../middleware/ensureAuthentication");
 
-const { addSession } = require("../controller/sessionController");
+const { addSession, getSessions } = require("../controller/sessionController");
 
 router.post(
   "/addSession",
@@ -18,6 +18,18 @@ router.post(
     userRoles.BOX_OFFICE_SUPERVISOR,
   ]),
   asyncWrapper(addSession)
+);
+
+router.get(
+  "/getSessions",
+  asyncWrapper(ensureAuthentication),
+  ensureAuthorization([
+    userRoles.ADMIN,
+    userRoles.BOX_OFFICE_CLERK,
+    userRoles.BOX_OFFICE_SUPERVISOR,
+    userRoles.CLIENT,
+  ]),
+  asyncWrapper(getSessions)
 );
 
 module.exports = { router };

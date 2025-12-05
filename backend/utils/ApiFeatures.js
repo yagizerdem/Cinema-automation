@@ -33,19 +33,30 @@ class ApiFeatures {
 
   // exact match
   filter() {
-    // 1A) Filtering
     const queryObj = { ...this.queryString };
     const excludedFields = ["page", "sort", "limit", "fields"];
     excludedFields.forEach((el) => delete queryObj[el]);
 
-    // 1B) Advanced filtering
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(
-      /\b(gt|gte|lt|lte|ne)\b/g,
-      (match) => `$${match}`
-    );
-    this.query = this.query.find(JSON.parse(queryStr));
+    queryStr = queryStr.replace(/\b(gt|gte|lt|lte|ne)\b/g, (m) => `$${m}`);
 
+    let parsedQuery = JSON.parse(queryStr);
+
+    for (const key in parsedQuery) {
+      if (parsedQuery[key] && typeof parsedQuery[key] === "object") {
+        for (const op in parsedQuery[key]) {
+          const val = parsedQuery[key][op];
+
+          if (!isNaN(val)) {
+            parsedQuery[key][op] = Number(val);
+          } else if (typeof val === "string" && !isNaN(Date.parse(val))) {
+            parsedQuery[key][op] = new Date(val);
+          }
+        }
+      }
+    }
+
+    this.query = this.query.find(parsedQuery);
     return this;
   }
 

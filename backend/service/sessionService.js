@@ -7,6 +7,7 @@ const {
 const { isTimeSpanAvailable } = require("../business/sessionRelatedLogic");
 const { entityStatus } = require("../enum/entityStatus");
 const { Session } = require("../model/entity/Session");
+const { ApiFeatures } = require("../utils/ApiFeatures");
 
 async function insertSession({
   filmId,
@@ -44,4 +45,20 @@ async function insertSession({
   return newSession;
 }
 
-module.exports = { insertSession };
+async function getSessions(query = {}) {
+  const apiFeatures = new ApiFeatures(
+    Session.find({ entityStatus: entityStatus.ACTIVE }),
+    query
+  );
+
+  const films = await apiFeatures
+    .filter()
+    .sortAscending()
+    .sortDescending()
+    .limitFields()
+    .paginate().query;
+
+  return films;
+}
+
+module.exports = { insertSession, getSessions };
