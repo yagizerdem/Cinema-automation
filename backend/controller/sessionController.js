@@ -5,6 +5,8 @@ const { sessionSchema } = require("../validator/sessionControllerValidator");
 const {
   insertSession,
   getSessions: getSessionsService,
+  removeSessionSoft: removeSessionSoftService,
+  removeSessionHard: removeSessionHardService,
 } = require("../service/sessionService");
 var qs = require("qs");
 
@@ -47,9 +49,12 @@ async function getSessions(req, res) {
 }
 
 async function removeSessionSoft(req, res) {
+  const { sessionId } = req.params;
+  const removedSessionFromDb = await removeSessionSoftService(sessionId);
+
   const payload = ApiResponse.success({
     message: "Session removed successfully",
-    data: null,
+    data: removedSessionFromDb,
     statusCode: HttpStatusCode.OK,
   });
 
@@ -57,9 +62,12 @@ async function removeSessionSoft(req, res) {
 }
 
 async function removeSessionHard(req, res) {
+  const { sessionId } = req.params;
+  const removedSessionFromDb = await removeSessionHardService(sessionId);
+
   const payload = ApiResponse.success({
     message: "Session removed successfully",
-    data: null,
+    data: removedSessionFromDb,
     statusCode: HttpStatusCode.OK,
   });
 

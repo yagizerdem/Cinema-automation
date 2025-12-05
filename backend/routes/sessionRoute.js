@@ -6,7 +6,12 @@ const { ensureAuthorization } = require("../middleware/ensureAuthorization");
 const { userRoles } = require("../enum/userRoles");
 const { ensureAuthentication } = require("../middleware/ensureAuthentication");
 
-const { addSession, getSessions } = require("../controller/sessionController");
+const {
+  addSession,
+  getSessions,
+  removeSessionSoft,
+  removeSessionHard,
+} = require("../controller/sessionController");
 
 router.post(
   "/addSession",
@@ -30,6 +35,30 @@ router.get(
     userRoles.CLIENT,
   ]),
   asyncWrapper(getSessions)
+);
+
+router.post(
+  "/removeSessionSoft/:sessionId",
+  asyncWrapper(ensureAuthentication),
+  ensureAuthorization([
+    userRoles.ADMIN,
+    userRoles.BOX_OFFICE_CLERK,
+    userRoles.BOX_OFFICE_SUPERVISOR,
+    userRoles.CLIENT,
+  ]),
+  asyncWrapper(removeSessionSoft)
+);
+
+router.post(
+  "/removeSessionHard/:sessionId",
+  asyncWrapper(ensureAuthentication),
+  ensureAuthorization([
+    userRoles.ADMIN,
+    userRoles.BOX_OFFICE_CLERK,
+    userRoles.BOX_OFFICE_SUPERVISOR,
+    userRoles.CLIENT,
+  ]),
+  asyncWrapper(removeSessionHard)
 );
 
 module.exports = { router };
