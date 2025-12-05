@@ -5,8 +5,9 @@ const schema = new mongoose.Schema({
   film: { type: mongoose.Schema.Types.ObjectId, ref: "Film", required: true },
   hall: { type: mongoose.Schema.Types.ObjectId, ref: "Hall", required: true },
 
-  date: Date, // e.g., 2025-12-04
-  time: String, // e.g., "19:00"
+  // START & END TIME — full ISO datetime (year, month, day, hour, minute, second, UTC)
+  startTime: { type: Date, required: true },
+  endTime: { type: Date, required: true },
 
   isSpecial: Boolean, // festival / special day
   basePrice: Number,

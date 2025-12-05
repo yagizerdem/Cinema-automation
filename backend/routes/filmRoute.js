@@ -16,7 +16,11 @@ router.post(
   "/addFilm",
   ensureNotEmptyBody,
   asyncWrapper(ensureAuthentication),
-  ensureAuthorization([userRoles.ADMIN, userRoles.BOX_OFFICE_SUPERVISOR]),
+  ensureAuthorization([
+    userRoles.ADMIN,
+    userRoles.BOX_OFFICE_CLERK,
+    userRoles.BOX_OFFICE_SUPERVISOR,
+  ]),
   asyncWrapper(addFilm)
 );
 router.get(
@@ -32,7 +36,11 @@ router.get(
 router.post(
   "/removeFilmSoft/:filmId",
   asyncWrapper(ensureAuthentication),
-  ensureAuthorization([userRoles.ADMIN, userRoles.BOX_OFFICE_SUPERVISOR]),
+  ensureAuthorization([
+    userRoles.ADMIN,
+    userRoles.BOX_OFFICE_CLERK,
+    userRoles.BOX_OFFICE_SUPERVISOR,
+  ]),
   asyncWrapper(removeFilmSoft)
 );
 
