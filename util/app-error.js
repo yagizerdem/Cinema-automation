@@ -1,4 +1,4 @@
-const { HttpStatusCode } = require("./status_codes");
+const { HttpStatusCode } = require("./http-status-codes");
 
 class AppError extends Error {
   constructor({

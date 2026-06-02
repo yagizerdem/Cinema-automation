@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { login, register, logout } = require("../controller/auth-controller");
+const asyncHandler = require("../util/async-handler");
 
 /**
  * @swagger
@@ -41,7 +42,7 @@ const { login, register, logout } = require("../controller/auth-controller");
  *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  */
 
-router.post("/login", login);
+router.post("/login", asyncHandler(login));
 
 /**
  * @swagger
@@ -79,8 +80,8 @@ router.post("/login", login);
  *         description: Successfully registered
  */
 
-router.post("/register", register);
+router.post("/register", asyncHandler(register));
 
-router.post("/logout", logout);
+router.post("/logout", asyncHandler(logout));
 
 module.exports = { router };
