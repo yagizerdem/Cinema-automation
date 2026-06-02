@@ -5,8 +5,6 @@ const { HttpStatusCode } = require("../util/http-status-codes");
 module.exports = (err, req, res, next) => {
   const statusCode = err.statusCode || HttpStatusCode.INTERNAL_SERVER_ERROR;
 
-  console.log(err);
-
   if (err instanceof AppError && err.isOperational) {
     return res.status(statusCode).json(
       ApiResponse.create({

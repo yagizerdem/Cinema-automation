@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { login, register, logout } = require("../controller/auth-controller");
 const asyncHandler = require("../util/async-handler");
+const { registerValidator } = require("../middleware/auth-middleware");
 
 /**
  * @swagger
@@ -80,7 +81,11 @@ router.post("/login", asyncHandler(login));
  *         description: Successfully registered
  */
 
-router.post("/register", asyncHandler(register));
+router.post(
+  "/register",
+  asyncHandler(registerValidator),
+  asyncHandler(register),
+);
 
 router.post("/logout", asyncHandler(logout));
 

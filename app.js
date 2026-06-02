@@ -3,6 +3,29 @@ const app = express();
 const { router: authRouter } = require("./router/auth-router");
 const { AppError } = require("./util/app-error");
 const errorHandler = require("./controller/error-handler");
+const { HttpStatusCode } = require("./util/http-status-codes");
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Cinema Automation API",
+      version: "1.0.0",
+      description: "API documentation",
+    },
+    servers: [
+      {
+        url: `http://localhost:${process.env.PORT}`,
+      },
+    ],
+  },
+  apis: ["./router/*.js"],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(express.json());
 app.use("/api/auth", authRouter);
