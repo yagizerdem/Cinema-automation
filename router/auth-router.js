@@ -8,11 +8,12 @@ const {
 } = require("../controller/auth-controller");
 const asyncHandler = require("../util/async-handler");
 
-const {
-  registerValidator,
-  loginValidator,
-} = require("../middleware/auth-middleware");
+const { validateReqBody } = require("../middleware/validation-middleware");
 const passport = require("passport");
+const {
+  getLoginValidator,
+  getRegisterValidator,
+} = require("../validator/auth-validator");
 
 /**
  * @swagger
@@ -53,7 +54,11 @@ const passport = require("passport");
  *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  */
 
-router.post("/login", asyncHandler(loginValidator), asyncHandler(login));
+router.post(
+  "/login",
+  asyncHandler(validateReqBody(getLoginValidator())),
+  asyncHandler(login),
+);
 
 /**
  * @swagger
@@ -93,7 +98,7 @@ router.post("/login", asyncHandler(loginValidator), asyncHandler(login));
 
 router.post(
   "/register",
-  asyncHandler(registerValidator),
+  asyncHandler(validateReqBody(getRegisterValidator())),
   asyncHandler(register),
 );
 

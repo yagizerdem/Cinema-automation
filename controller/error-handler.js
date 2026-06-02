@@ -48,7 +48,7 @@ module.exports = (err, req, res, next) => {
     switch (err.code) {
       case 11000: {
         const value = err.message.match(/(["'])(\\?.)*?\1/)[0];
-        const message = `field value:${value} aleady exist. please use another`;
+        const message = `${value} aleady exist. please use another`;
 
         return res.status(HttpStatusCode.BAD_REQUEST).json(
           ApiResponse.create({

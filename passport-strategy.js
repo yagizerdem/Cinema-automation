@@ -19,15 +19,18 @@ opts.secretOrKey = process.env.JWT_SECRET;
 passport.use(
   new JwtStrategy(opts, async function (jwt_payload, done) {
     const { email, firstName, lastName } = jwt_payload;
-
     if (!jwt_payload) {
       return done(null, false);
     }
 
+    const userFromDb = await User.findOne({ email }).select("-password, -__v");
+
+    if (!userFromDb) {
+      return done(null, false);
+    }
+
     return done(null, {
-      email,
-      firstName,
-      lastName,
+      ...userFromDb.toObject(),
     });
   }),
 );

@@ -5,61 +5,25 @@ const {
 const { AppError } = require("../util/app-error");
 const { HttpStatusCode } = require("../util/http-status-codes");
 
-async function registerValidator(req, res, next) {
-  try {
-    const schema = getRegisterValidator();
-    const validatedBody = await schema.validateAsync(req.body, {
-      abortEarly: false,
-      stripUnknown: false,
-    });
-    req.body = validatedBody;
+function allowedRoles() {
+  const allowedRoles = Array.from(arguments);
+  return (req, res, next) => {
+    const user = req.user;
+    const userRole = user.role;
+
+    if (!allowedRoles.includes(userRole)) {
+      return next(
+        new AppError({
+          message: "You do not have permission to perform this action",
+          statusCode: HttpStatusCode.FORBIDDEN,
+          isOperational: true,
+        }),
+      );
+    }
     next();
-  } catch (error) {
-    const formattedErrors = {};
-    error.details.forEach((err) => {
-      formattedErrors[err.path[0]] = err.message;
-    });
-    next(
-      new AppError({
-        message: "Validation failed",
-        statusCode: HttpStatusCode.UNPROCESSABLE_ENTITY,
-        errors: formattedErrors,
-        isOperational: true,
-      }),
-    );
-  }
-}
-
-async function loginValidator(req, res, next) {
-  try {
-    const schema = getLoginValidator();
-
-    const validatedBody = await schema.validateAsync(req.body, {
-      abortEarly: false,
-      stripUnknown: false,
-    });
-
-    req.body = validatedBody;
-    next();
-  } catch (error) {
-    const formattedErrors = {};
-
-    error.details.forEach((err) => {
-      formattedErrors[err.path[0]] = err.message;
-    });
-
-    next(
-      new AppError({
-        message: "Validation failed",
-        statusCode: HttpStatusCode.UNPROCESSABLE_ENTITY,
-        errors: formattedErrors,
-        isOperational: true,
-      }),
-    );
-  }
+  };
 }
 
 module.exports = {
-  registerValidator,
-  loginValidator,
+  allowedRoles,
 };
