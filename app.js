@@ -6,6 +6,12 @@ const errorHandler = require("./controller/error-handler");
 const { HttpStatusCode } = require("./util/http-status-codes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
+const passport = require("passport");
+require("./passport-strategy"); // load passport configuration
+var cookieParser = require("cookie-parser");
+
+app.use(cookieParser());
+app.use(passport.initialize());
 
 const swaggerOptions = {
   swaggerDefinition: {

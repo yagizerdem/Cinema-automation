@@ -1,12 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const { login, register, logout } = require("../controller/auth-controller");
+const {
+  login,
+  register,
+  logout,
+  me,
+} = require("../controller/auth-controller");
 const asyncHandler = require("../util/async-handler");
 
 const {
   registerValidator,
   loginValidator,
 } = require("../middleware/auth-middleware");
+const passport = require("passport");
 
 /**
  * @swagger
@@ -104,5 +110,22 @@ router.post(
  */
 
 router.post("/logout", asyncHandler(logout));
+
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Get the current user's details
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       200:
+ *         description: Successfully fetched user details
+ */
+router.get(
+  "/me",
+  passport.authenticate("jwt", { session: false }),
+  asyncHandler(me),
+);
 
 module.exports = { router };

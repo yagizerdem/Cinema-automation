@@ -72,8 +72,19 @@ async function logout(req, res) {
     .json(ApiResponse.ok("User logged out successfully"));
 }
 
+async function me(req, res) {
+  const user = req.user; // Passport sets the authenticated user on req.user
+  return res.status(HttpStatusCode.OK).json(
+    ApiResponse.ok({
+      message: "User details fetched successfully",
+      data: user,
+    }),
+  );
+}
+
 module.exports = {
   login,
   register,
   logout,
+  me,
 };
