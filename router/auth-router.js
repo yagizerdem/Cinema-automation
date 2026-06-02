@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router();
 const { login, register, logout } = require("../controller/auth-controller");
 const asyncHandler = require("../util/async-handler");
-const { registerValidator } = require("../middleware/auth-middleware");
+
+const {
+  registerValidator,
+  loginValidator,
+} = require("../middleware/auth-middleware");
 
 /**
  * @swagger
@@ -43,7 +47,7 @@ const { registerValidator } = require("../middleware/auth-middleware");
  *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  */
 
-router.post("/login", asyncHandler(login));
+router.post("/login", asyncHandler(loginValidator), asyncHandler(login));
 
 /**
  * @swagger
@@ -86,6 +90,18 @@ router.post(
   asyncHandler(registerValidator),
   asyncHandler(register),
 );
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Log out a user
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ */
 
 router.post("/logout", asyncHandler(logout));
 
