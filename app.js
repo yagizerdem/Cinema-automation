@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { router: authRouter } = require("./router/auth-router");
 const { router: hallRouter } = require("./router/hall-router");
+const { router: movieRouter } = require("./router/movie-router");
 const { AppError } = require("./util/app-error");
 const errorHandler = require("./controller/error-handler");
 const { HttpStatusCode } = require("./util/http-status-codes");
@@ -37,6 +38,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/hall", hallRouter);
+app.use("/api/movie", movieRouter);
 
 app.use((req, res, next) => {
   next(
