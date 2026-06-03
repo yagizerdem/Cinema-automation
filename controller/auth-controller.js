@@ -82,9 +82,34 @@ async function me(req, res) {
   );
 }
 
+async function googleOAuthCallback(req, res) {
+  const user = req.user; // Passport sets the authenticated user on req.user
+
+  var privateKey = process.env.JWT_SECRET;
+  var payload = {
+    email: user.email,
+    id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  };
+  const token = jwt.sign(payload, privateKey, { algorithm: "HS256" });
+
+  res.cookie("jwt", token, {
+    maxAge: 1000 * 60 * 60 * 24 * 60, // Expires in 60 days
+    httpOnly: true, // Prevents client-side JavaScript access (XSS protection)
+    secure: true, // Ensures cookie is only sent over HTTPS
+    sameSite: "lax", // Protects against CSRF attacks
+  });
+
+  return res
+    .status(HttpStatusCode.OK)
+    .json(ApiResponse.ok("User logged in successfully"));
+}
+
 module.exports = {
   login,
   register,
   logout,
   me,
+  googleOAuthCallback,
 };

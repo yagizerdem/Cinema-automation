@@ -5,6 +5,7 @@ const {
   register,
   logout,
   me,
+  googleOAuthCallback,
 } = require("../controller/auth-controller");
 const asyncHandler = require("../util/async-handler");
 
@@ -131,6 +132,49 @@ router.get(
   "/me",
   passport.authenticate("jwt", { session: false }),
   asyncHandler(me),
+);
+
+/**
+ * @swagger
+ * /api/auth/google:
+ *   get:
+ *     summary: Start Google OAuth login
+ *     tags:
+ *       - Auth
+ *     description: Redirects the user to Google's OAuth consent screen.
+ *     responses:
+ *       302:
+ *         description: Redirects to Google OAuth login page
+ */
+
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    session: false,
+  }),
+);
+
+/**
+ * @swagger
+ * /api/auth/google/callback:
+ *   get:
+ *     summary: Google OAuth callback
+ *     tags:
+ *       - Auth
+ *     description: Handles Google OAuth callback, creates or finds user, sets JWT cookie, and redirects to frontend.
+ *     responses:
+ *       302:
+ *         description: Redirects to frontend after successful login or redirects to login page on failure
+ */
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
+  }),
+  asyncHandler(googleOAuthCallback),
 );
 
 module.exports = { router };
