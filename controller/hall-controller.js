@@ -26,7 +26,34 @@ async function deleteHall(req, res) {
   );
 }
 
+async function createSeat(req, res) {
+  const { hallId } = req.params;
+  const seatData = req.body;
+  const seat = await hallService.createSeat(hallId, seatData);
+
+  res.status(HttpStatusCode.CREATED).json(
+    ApiResponse.created({
+      message: "Seat created successfully",
+      data: seat,
+    }),
+  );
+}
+
+async function deleteSeat(req, res) {
+  const { hallId, seatId } = req.params;
+  const seat = await hallService.deleteSeat(hallId, seatId);
+
+  res.status(HttpStatusCode.OK).json(
+    ApiResponse.ok({
+      message: "Seat deleted successfully",
+      data: seat,
+    }),
+  );
+}
+
 module.exports = {
   createHall,
   deleteHall,
+  createSeat,
+  deleteSeat,
 };
