@@ -1,4 +1,5 @@
 const { Movie } = require("../model/movie");
+const { APIFeatures } = require("../util/api-features");
 
 async function createMovie(movieData) {
   const movie = new Movie({
@@ -49,10 +50,18 @@ async function ensureMovieNotExistByTitle(title) {
   }
 }
 
+async function getMovies(queryString) {
+  const apiFeatures = new APIFeatures(Movie.find(), queryString);
+  const query = apiFeatures.filter().sort().limitFields().paginate().query;
+  const movies = await query;
+  return movies;
+}
+
 module.exports = {
   createMovie,
   deleteMovie,
   ensureMovieExistById,
   ensureMovieExistByTitle,
   ensureMovieNotExistByTitle,
+  getMovies,
 };

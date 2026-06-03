@@ -12,8 +12,11 @@ const passport = require("passport");
 require("./passport-strategy"); // load passport configuration
 var cookieParser = require("cookie-parser");
 
+app.set("query parser", "extended");
+
 app.use(cookieParser());
 app.use(passport.initialize());
+app.use(express.json());
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -35,7 +38,6 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/hall", hallRouter);
 app.use("/api/movie", movieRouter);

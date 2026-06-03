@@ -22,4 +22,15 @@ async function deleteMovie(req, res) {
   );
 }
 
-module.exports = { createMovie, deleteMovie };
+async function getMovies(req, res) {
+  const queryString = req.query;
+  const moviesFromDb = await movieService.getMovies(queryString);
+  return res.status(HttpStatusCode.OK).json(
+    ApiResponse.ok({
+      message: "Movies retrieved successfully",
+      data: moviesFromDb,
+    }),
+  );
+}
+
+module.exports = { createMovie, deleteMovie, getMovies };
