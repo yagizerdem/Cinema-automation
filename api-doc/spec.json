@@ -1,0 +1,586 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Cinema Automation API",
+    "version": "1.0.0",
+    "description": "API documentation"
+  },
+  "servers": [{ "url": "http://localhost:3000" }],
+  "paths": {
+    "/api/screening/create": {
+      "post": {
+        "summary": "Create a new screening",
+        "tags": ["Screening"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "movie",
+                  "hall",
+                  "startTime",
+                  "endTime",
+                  "basePrice"
+                ],
+                "properties": {
+                  "movie": {
+                    "type": "string",
+                    "pattern": "^[a-fA-F0-9]{24}$",
+                    "example": "685f8f1d4b6e9a1234567890"
+                  },
+                  "hall": {
+                    "type": "string",
+                    "pattern": "^[a-fA-F0-9]{24}$",
+                    "example": "685f8f1d4b6e9a1234567891"
+                  },
+                  "startTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-06-04T18:00:00.000Z"
+                  },
+                  "endTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-06-04T20:49:00.000Z",
+                    "description": "Must be after startTime"
+                  },
+                  "basePrice": {
+                    "type": "number",
+                    "minimum": 0,
+                    "example": 150
+                  },
+                  "isSpecialSession": { "type": "boolean", "example": false }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Screening created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "685f8f1d4b6e9a1234567892"
+                    },
+                    "movie": {
+                      "type": "string",
+                      "example": "685f8f1d4b6e9a1234567890"
+                    },
+                    "hall": {
+                      "type": "string",
+                      "example": "685f8f1d4b6e9a1234567891"
+                    },
+                    "startTime": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-04T18:00:00.000Z"
+                    },
+                    "endTime": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-06-04T20:49:00.000Z"
+                    },
+                    "basePrice": { "type": "number", "example": 150 },
+                    "isSpecialSession": { "type": "boolean", "example": false },
+                    "createdAt": { "type": "string", "format": "date-time" },
+                    "updatedAt": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/movie/create": {
+      "post": {
+        "summary": "Create a new movie",
+        "tags": ["Movie"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "durationMinute"],
+                "properties": {
+                  "title": { "type": "string", "example": "Interstellar" },
+                  "durationMinute": { "type": "number", "example": 169 },
+                  "description": {
+                    "type": "string",
+                    "example": "A science fiction movie."
+                  },
+                  "isActive": { "type": "boolean", "example": true }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Movie created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "685f8f1d4b6e9a1234567890"
+                    },
+                    "title": { "type": "string", "example": "Interstellar" },
+                    "durationMinute": { "type": "number", "example": 169 },
+                    "description": {
+                      "type": "string",
+                      "example": "A science fiction movie."
+                    },
+                    "isActive": { "type": "boolean", "example": true }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/movie/delete/{id}": {
+      "delete": {
+        "summary": "Delete a movie",
+        "tags": ["Movie"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the movie to delete",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": { "type": "string", "example": "1" },
+                    "title": { "type": "string", "example": "Interstellar" },
+                    "durationMinute": { "type": "number", "example": 169 },
+                    "description": {
+                      "type": "string",
+                      "example": "A science fiction movie."
+                    },
+                    "isActive": { "type": "boolean", "example": true }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/movie/get-movies": {
+      "get": {
+        "summary": "Get movies",
+        "tags": ["Movie"],
+        "parameters": [
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "description": "Filter movies by exact title",
+            "schema": { "type": "string" },
+            "example": "Interstellar"
+          },
+          {
+            "name": "durationMinute[gte]",
+            "in": "query",
+            "required": false,
+            "description": "Filter movies with duration greater than or equal to value",
+            "schema": { "type": "number" },
+            "example": 120
+          },
+          {
+            "name": "durationMinute[gt]",
+            "in": "query",
+            "required": false,
+            "description": "Filter movies with duration greater than value",
+            "schema": { "type": "number" },
+            "example": 120
+          },
+          {
+            "name": "durationMinute[lte]",
+            "in": "query",
+            "required": false,
+            "description": "Filter movies with duration less than or equal to value",
+            "schema": { "type": "number" },
+            "example": 180
+          },
+          {
+            "name": "durationMinute[lt]",
+            "in": "query",
+            "required": false,
+            "description": "Filter movies with duration less than value",
+            "schema": { "type": "number" },
+            "example": 180
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "required": false,
+            "description": "Filter movies by active status",
+            "schema": { "type": "boolean" },
+            "example": true
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Comma-separated fields to sort by",
+            "schema": { "type": "string" },
+            "example": "durationMinute,title"
+          },
+          {
+            "name": "sortAsc",
+            "in": "query",
+            "required": false,
+            "description": "If provided, sort ascending. If omitted, sort descending.",
+            "schema": { "type": "boolean" },
+            "example": true
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "description": "Comma-separated fields to return",
+            "schema": { "type": "string" },
+            "example": "title,durationMinute,isActive"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number",
+            "schema": { "type": "number" },
+            "example": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Number of movies per page",
+            "schema": { "type": "number" },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movies fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "685f8f1d4b6e9a1234567890"
+                      },
+                      "title": { "type": "string", "example": "Interstellar" },
+                      "durationMinute": { "type": "number", "example": 169 },
+                      "description": {
+                        "type": "string",
+                        "example": "A science fiction movie."
+                      },
+                      "isActive": { "type": "boolean", "example": true },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-06-03T17:00:00.000Z"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2026-06-03T17:00:00.000Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hall/create": {
+      "post": {
+        "summary": "Create a new hall",
+        "tags": ["Hall"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "isActive"],
+                "properties": {
+                  "name": { "type": "string", "example": "Main Hall" },
+                  "isActive": { "type": "boolean", "example": true }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Hall created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": { "type": "string", "example": "1" },
+                    "name": { "type": "string", "example": "Main Hall" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hall/delete/{id}": {
+      "delete": {
+        "summary": "Delete a hall",
+        "tags": ["Hall"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the hall to delete",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hall deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": { "type": "string", "example": "1" },
+                    "name": { "type": "string", "example": "Main Hall" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hall/add-seat/{hallId}": {
+      "post": {
+        "summary": "Add a new seat to a hall",
+        "tags": ["Hall"],
+        "parameters": [
+          {
+            "name": "hallId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the hall to add the seat to",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["row", "number", "isActive"],
+                "properties": {
+                  "row": { "type": "string", "example": "A1" },
+                  "number": { "type": "number", "example": 1 },
+                  "isActive": { "type": "boolean", "example": true }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Seat added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": { "type": "string", "example": "1" },
+                    "number": { "type": "number", "example": 1 },
+                    "isActive": { "type": "boolean", "example": true },
+                    "name": { "type": "string", "example": "A1" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/hall/delete-seat/{hallId}/{seatId}": {
+      "delete": {
+        "summary": "Delete a seat from a hall",
+        "tags": ["Hall"],
+        "parameters": [
+          {
+            "name": "hallId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the hall to delete the seat from",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "seatId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the seat to delete",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Seat deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": { "type": "string", "example": "1" },
+                    "number": { "type": "number", "example": 1 },
+                    "isActive": { "type": "boolean", "example": true },
+                    "name": { "type": "string", "example": "A1" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Log in a user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": { "type": "string", "example": "test@gmail.com" },
+                  "password": { "type": "string", "example": "123456" }
+                },
+                "example": { "email": "test@gmail.com", "password": "123456" }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a user",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password", "firstName", "lastName"],
+                "properties": {
+                  "email": { "type": "string", "example": "test@gmail.com" },
+                  "password": { "type": "string", "example": "123456" },
+                  "firstName": { "type": "string", "example": "John" },
+                  "lastName": { "type": "string", "example": "Ousterhout" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Successfully registered" } }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "Log out a user",
+        "tags": ["Auth"],
+        "responses": { "200": { "description": "Successfully logged out" } }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "summary": "Get the current user's details",
+        "tags": ["Auth"],
+        "responses": {
+          "200": { "description": "Successfully fetched user details" }
+        }
+      }
+    },
+    "/api/auth/google": {
+      "get": {
+        "summary": "Start Google OAuth login",
+        "tags": ["Auth"],
+        "description": "Redirects the user to Google's OAuth consent screen.",
+        "responses": {
+          "302": { "description": "Redirects to Google OAuth login page" }
+        }
+      }
+    },
+    "/api/auth/google/callback": {
+      "get": {
+        "summary": "Google OAuth callback",
+        "tags": ["Auth"],
+        "description": "Handles Google OAuth callback, creates or finds user, sets JWT cookie, and redirects to frontend.",
+        "responses": {
+          "302": {
+            "description": "Redirects to frontend after successful login or redirects to login page on failure"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": []
+}

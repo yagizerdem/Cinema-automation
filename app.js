@@ -3,14 +3,15 @@ const app = express();
 const { router: authRouter } = require("./router/auth-router");
 const { router: hallRouter } = require("./router/hall-router");
 const { router: movieRouter } = require("./router/movie-router");
+const { router: screeningRouter } = require("./router/screening-router");
 const { AppError } = require("./util/app-error");
 const errorHandler = require("./controller/error-handler");
 const { HttpStatusCode } = require("./util/http-status-codes");
 const swaggerUi = require("swagger-ui-express");
-const swaggerJsDoc = require("swagger-jsdoc");
 const passport = require("passport");
 require("./passport-strategy"); // load passport configuration
 var cookieParser = require("cookie-parser");
+const { swaggerSpec } = require("./swagger-spec");
 
 app.set("query parser", "extended");
 
@@ -18,30 +19,18 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(express.json());
 
-const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Cinema Automation API",
-      version: "1.0.0",
-      description: "API documentation",
-    },
-    servers: [
-      {
-        url: `http://localhost:${process.env.PORT}`,
-      },
-    ],
-  },
-  apis: ["./router/*.js"],
-};
+if (process.env.ENABLE_SWAGGER === "true") {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+  app.get("/swagger.json", (req, res) => {
+    res.json(swaggerSpec);
+  });
+}
 
 app.use("/api/auth", authRouter);
 app.use("/api/hall", hallRouter);
 app.use("/api/movie", movieRouter);
-
+app.use("/api/screening", screeningRouter);
 app.use((req, res, next) => {
   next(
     new AppError({

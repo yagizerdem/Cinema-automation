@@ -1,5 +1,7 @@
 const { Movie } = require("../model/movie");
 const { APIFeatures } = require("../util/api-features");
+const { AppError } = require("../util/app-error");
+const { HttpStatusCode } = require("../util/http-status-codes");
 
 async function createMovie(movieData) {
   const movie = new Movie({
