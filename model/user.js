@@ -7,7 +7,7 @@ const UserSchema = new Schema(
     googleId: { type: String, unique: true, sparse: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, unique: true, sparse: true },
+    email: { type: String, unique: true, required: true },
     phone: { type: String },
     password: { type: String },
 
