@@ -39,6 +39,7 @@ const UserSchema = new Schema(
     birthDate: { type: Date },
     occupation: { type: String },
     incomeLevel: { type: String },
+    credit: { type: Number, default: 0 },
 
     rejectionReason: { type: String },
     approvedAt: { type: Date },

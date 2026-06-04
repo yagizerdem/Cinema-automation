@@ -4,6 +4,7 @@ const { router: authRouter } = require("./router/auth-router");
 const { router: hallRouter } = require("./router/hall-router");
 const { router: movieRouter } = require("./router/movie-router");
 const { router: screeningRouter } = require("./router/screening-router");
+const { router: ticketRouter } = require("./router/ticket-router");
 const { AppError } = require("./util/app-error");
 const errorHandler = require("./controller/error-handler");
 const { HttpStatusCode } = require("./util/http-status-codes");
@@ -31,6 +32,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/hall", hallRouter);
 app.use("/api/movie", movieRouter);
 app.use("/api/screening", screeningRouter);
+app.use("/api/ticket", ticketRouter);
+
 app.use((req, res, next) => {
   next(
     new AppError({
