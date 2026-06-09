@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {
-  buyCredit,
-  buyCreditWebhook,
-} = require("../controller/payment-controller");
+const { buyCredit } = require("../controller/payment-controller");
 const asyncHandler = require("../util/async-handler");
 
 const { validateReqBody } = require("../middleware/validation-middleware");
@@ -66,12 +63,6 @@ router.post(
   asyncHandler(allowedRoles("CUSTOMER")),
   asyncHandler(validateReqBody(getPaymentValidator())),
   asyncHandler(buyCredit),
-);
-
-router.post(
-  "/buy-credit-webhook",
-  express.raw({ type: "application/json" }),
-  asyncHandler(buyCreditWebhook),
 );
 
 module.exports = { router };
